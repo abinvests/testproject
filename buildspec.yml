@@ -4,15 +4,17 @@ phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
-      - eval $(aws ecr get-login --region us-east-2 --no-include-email | sed 's|https://||')
+      - REPOSITORY_URI=318147513112.dkr.ecr.us-east-2.amazonaws.com/projettest
+      - IMAGE_TAG=1.2
+      - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 318147513112.dkr.ecr.us-east-2.amazonaws.com
   build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...          
       - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
-      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG      
+      - docker tag $REPOSITORY_URI:$IMAGE_TAG $REPOSITORY_URI:$IMAGE_TAG      
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
-      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+      - docker push 318147513112.dkr.ecr.us-east-2.amazonaws.com/projettest:$IMAGE_TAG
