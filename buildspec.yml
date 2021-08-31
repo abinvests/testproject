@@ -6,7 +6,7 @@ phases:
       - echo Logging in to Amazon ECR...
       - REPOSITORY_URI=318147513112.dkr.ecr.us-east-2.amazonaws.com/projettest
       - IMAGE_TAG=1.2
-      - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 318147513112.dkr.ecr.us-east-2.amazonaws.com
+      - eval $(aws ecr get-login --region us-east-2 --no-include-email | sed 's|https://||')
   build:
     commands:
       - echo Build started on `date`
